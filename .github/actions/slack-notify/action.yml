@@ -1,0 +1,41 @@
+name: Slack Notify
+description: Send a Slack DM to the GitHub actor
+
+inputs:
+  SLACK_MESSAGE:
+    description: The message to send
+    required: true
+  SLACK_BOT_TOKEN:
+    description: Slack Bot User OAuth Token
+    required: true
+  SLACK_USERNAME_MAPPER_SSH_KEY:
+    description: SSH key secret which allows us to read from gh-slack-username-mapper
+    required: true
+
+runs:
+  using: "composite"
+
+  steps:
+  - name: Checkout gh-slack-username-mapper code
+    uses: actions/checkout@v4
+    with:
+      repository: "starshipteam/gh-slack-username-mapper"
+      ref: "main"
+      path: "scripts/gh-slack-username-mapper"
+      ssh-key: ${{ inputs.SLACK_USERNAME_MAPPER_SSH_KEY }}
+  - name: Install zx
+    shell: bash
+    run: npm install -g zx
+  - name: Get Slack User for GitHub Actor
+    shell: bash
+    id: slack-user
+    run: |
+      output=$(zx ./scripts/gh-slack-username-mapper/index.mjs --user ${{ github.actor }} --field memberId)
+      echo "MEMBER_ID=$output" >> "$GITHUB_OUTPUT"
+  - name: Send Direct Message to Slack user
+    uses: slackapi/slack-github-action@v1.25.0
+    with:
+      channel-id: ${{ steps.slack-user.outputs.MEMBER_ID }}
+      slack-message: "${{ inputs.SLACK_MESSAGE }}\n${{ github.event.head_commit.url }}\n${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+    env:
+      SLACK_BOT_TOKEN: ${{ inputs.SLACK_BOT_TOKEN }}

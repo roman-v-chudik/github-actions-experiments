@@ -1,0 +1,63 @@
+name: Deploy to S3
+description: Check out the lastest repo, build, deploy the result to S3, and invalidate the Cloudfront cache
+
+inputs:
+  AWS_REGION:
+    description: The AWS region where the S3 bucket is located
+    required: true
+  AWS_IAM_ROLE_ARN:
+    description: The ARN of the IAM Role with the proper permissions to assume
+    required: true
+  S3_BUCKET:
+    description: The name of the S3 bucket to modify
+    required: true
+  CLOUDFRONT_DISTRIBUTION:
+    description: The name of the Cloudfront Distribution fronting the S3 bucket
+    required: true
+  SLACK_BOT_TOKEN:
+    description: Slack Bot User OAuth Token
+    required: true
+  SLACK_USERNAME_MAPPER_SSH_KEY:
+    description: SSH key secret which allows us to read from gh-slack-username-mapper
+    required: true
+  ENVIRONMENT:
+    description: The environment to build for
+    required: true
+
+
+runs:
+  using: "composite"
+
+  steps:
+  - name: Checkout
+    uses: actions/checkout@v4
+  - name: Setup Node
+    uses: actions/setup-node@v4
+    with:
+      node-version: 18
+  - name: Install dependencies
+    run: npm install
+    shell: bash
+  - name: Build
+    run: npm run build:${{inputs.ENVIRONMENT}}
+    shell: bash
+  - name: Configure AWS credentials
+    uses: aws-actions/configure-aws-credentials@v4
+    with:
+      role-to-assume: ${{ inputs.AWS_IAM_ROLE_ARN }}
+      aws-region: ${{ inputs.AWS_REGION }}
+  - name: Push to S3
+    run: |
+      aws s3 sync dist/ s3://${{ inputs.S3_BUCKET }} --sse AES256
+    shell: bash
+  - name: Invalidate Cloudfront cache
+    run: |
+      aws cloudfront create-invalidation --distribution-id ${{ inputs.CLOUDFRONT_DISTRIBUTION }} --paths '/*'
+    shell: bash
+  - name: Message deployment failure to Slack
+    if: failure()
+    uses: ./.github/actions/slack-notify
+    with:
+      SLACK_MESSAGE: "Failed to Deploy to AWS bucket ${{ inputs.S3_BUCKET }}"
+      SLACK_BOT_TOKEN: ${{ inputs.SLACK_BOT_TOKEN }}
+      SLACK_USERNAME_MAPPER_SSH_KEY: ${{ inputs.SLACK_USERNAME_MAPPER_SSH_KEY }}
