@@ -1,0 +1,150 @@
+name: Deploy
+
+on:
+  workflow_call:
+    inputs:
+      aws-region:
+        required: true
+        type: string
+      environment:
+        required: true
+        type: string
+      aws-aim-role-arn:
+        required: true
+        type: string
+
+jobs:
+  terraform-check:
+    name: Terraform check on ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    permissions:
+      id-token: write
+      contents: read
+    timeout-minutes: 45
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: terraform-lint
+      uses: ./.github/actions/terraform-check-fmt-lint
+      with:
+        AWS_REGION: ${{ inputs.aws-region }}
+        ENVIRONMENT: ${{ inputs.environment }}
+        AWS_IAM_ROLE_ARN: ${{ inputs.aws-aim-role-arn }}
+    - name: terraform-plan
+      uses: ./.github/actions/terraform-plan
+      with:
+        AWS_REGION: ${{ vars.AWS_REGION }}
+        ENVIRONMENT: ${{ vars.STAGE }}
+        AWS_IAM_ROLE_ARN: ${{ inputs.aws-aim-role-arn }}
+      #TODO Save Terraform plan file and metadata
+
+  terraform-approve:
+    name: Terraform approve on ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    needs: [terraform-check]
+    environment: manual-approve-${{ inputs.environment }}
+    permissions:
+      id-token: write
+      contents: read
+    timeout-minutes: 45
+    steps:
+    - name: Approved
+      run: echo "Approved"
+
+  terraform-apply:
+    name: Terraform apply on ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    needs: [terraform-approve]
+    environment: ${{ inputs.environment }}
+    permissions:
+      id-token: write
+      contents: read
+    timeout-minutes: 45
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    #TODO Restore Terraform plan file and metadata
+    - name: terraform-apply
+      uses: ./.github/actions/terraform-apply
+      with:
+        AWS_REGION: ${{ vars.AWS_REGION }}
+        ENVIRONMENT: ${{ vars.STAGE }}
+        AWS_IAM_ROLE_ARN: ${{ inputs.aws-aim-role-arn }}
+
+  helm-check:
+    name: Helm check on ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    needs: [terraform-apply]
+    environment: ${{ inputs.environment }}
+    permissions:
+      id-token: write
+      contents: read
+    timeout-minutes: 45
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: validate-helm-charts
+      uses: ./.github/actions/validate-helm-charts
+      with:
+        AWS_REGION: ${{ vars.AWS_REGION }}
+        ENVIRONMENT: ${{ vars.STAGE }}
+        AWS_IAM_ROLE_ARN: ${{ inputs.aws-aim-role-arn }}
+    - name: dryrun-k8s-services
+      uses: ./.github/actions/dryrun-k8s-services
+      with:
+        AWS_REGION: ${{ vars.AWS_REGION }}
+        ENVIRONMENT: ${{ vars.STAGE }}
+        AWS_IAM_ROLE_ARN: ${{ inputs.aws-aim-role-arn }}
+
+  helm-approve:
+    name: Helm approve on ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    needs: [helm-check]
+    environment: manual-approve-${{ inputs.environment }}
+    permissions:
+      id-token: write
+      contents: read
+    timeout-minutes: 45
+    steps:
+    - name: Approved
+      run: echo "Approved"
+
+  helm-deploy:
+    name: Helm deploy on ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    needs: [helm-approve]
+    environment: dev
+    permissions:
+      id-token: write
+      contents: read
+    timeout-minutes: 45
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: deploy-k8s-services
+      uses: ./.github/actions/deploy-k8s-services
+      with:
+        AWS_REGION: ${{ vars.AWS_REGION }}
+        ENVIRONMENT: ${{ vars.STAGE }}
+        AWS_IAM_ROLE_ARN: ${{ inputs.aws-aim-role-arn }}
+
+  commit-deployment:
+    name: Commit deployment on ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    needs: [helm-deploy]
+    environment: ${{ inputs.environment }}
+    permissions:
+      id-token: write
+      contents: read
+    timeout-minutes: 45
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: commit-deployment
+      uses: ./.github/actions/commit-deployment
+      with:
+        AWS_REGION: ${{ vars.AWS_REGION }}
+        ENVIRONMENT: ${{ vars.STAGE }}
+        AWS_IAM_ROLE_ARN: ${{ inputs.aws-aim-role-arn }}
+
