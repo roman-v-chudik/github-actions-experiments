@@ -12,9 +12,6 @@ jobs:
     name: Terraform check on ${{ inputs.environment }}
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
-    permissions:
-      id-token: write
-      contents: read
     timeout-minutes: 45
     steps:
     - name: Checkout
@@ -38,9 +35,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [terraform-check]
     environment: manual-approve-${{ inputs.environment }}
-    permissions:
-      id-token: write
-      contents: read
     timeout-minutes: 45
     steps:
     - name: Approved
@@ -51,9 +45,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [terraform-approve]
     environment: ${{ inputs.environment }}
-    permissions:
-      id-token: write
-      contents: read
     timeout-minutes: 45
     steps:
     - name: Checkout
@@ -71,9 +62,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [terraform-apply]
     environment: ${{ inputs.environment }}
-    permissions:
-      id-token: write
-      contents: read
     timeout-minutes: 45
     steps:
     - name: Checkout
@@ -96,9 +84,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [helm-check]
     environment: manual-approve-${{ inputs.environment }}
-    permissions:
-      id-token: write
-      contents: read
     timeout-minutes: 45
     steps:
     - name: Approved
@@ -109,9 +94,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [helm-approve]
     environment: dev
-    permissions:
-      id-token: write
-      contents: read
     timeout-minutes: 45
     steps:
     - name: Checkout
@@ -128,9 +110,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [helm-deploy]
     environment: ${{ inputs.environment }}
-    permissions:
-      id-token: write
-      contents: read
     timeout-minutes: 45
     steps:
     - name: Checkout

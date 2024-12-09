@@ -9,6 +9,9 @@ jobs:
   deploy-on-dev:
     name: Deploy on dev
     uses: ./.github/workflows/deploy-reusable-workflow.yml
+    permissions:
+      id-token: write
+      contents: read
     with:
       environment: dev
 
