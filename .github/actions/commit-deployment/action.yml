@@ -1,13 +1,10 @@
 name: commit-deployment
 description: Check out the lastest repo and check Terraform code correctness
 
-inputs:
-  ENVIRONMENT:
-    description: The environment to check against
-    required: true
-  # AWS_REGION:
-  #   description: The AWS region where the S3 bucket is located
-  #   required: true
+# inputs:
+#   AWS_REGION:
+#     description: The AWS region where the S3 bucket is located
+#     required: true
   # AWS_IAM_ROLE_ARN:
   #   description: The ARN of the IAM Role with the proper permissions to assume
   #   required: true
@@ -25,5 +22,5 @@ runs:
   #     aws-region: ${{ inputs.AWS_REGION }}
   - name: Do it!
     run: |
-      echo commit-deployment job is here!
+      echo commit-deployment job on ${{ env.ENVIRONMENT }} is here at ${{ env.AWS_REGION }}!
     shell: bash

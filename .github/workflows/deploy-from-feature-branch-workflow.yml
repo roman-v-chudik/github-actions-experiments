@@ -3,14 +3,14 @@ name: Deploy from feature branch
 on:
   push:
     branches:
-      - 'feature/**'
+      - 'feature/*'
   workflow_dispatch:
 
 jobs:
   terraform-check-on-dev:
     name: Terraform check on Development
     runs-on: ubuntu-latest
-    environment: Development
+    environment: dev
     permissions:
       id-token: write
       contents: read
@@ -21,22 +21,20 @@ jobs:
     - name: terraform-lint
       uses: ./.github/actions/terraform-check-fmt-lint
       with:
-        # AWS_REGION: us-east-1
+        AWS_REGION: ${{ env.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
-        ENVIRONMENT: dev
     - name: terraform-plan
       uses: ./.github/actions/terraform-plan
       with:
-        # AWS_REGION: us-east-1
+        AWS_REGION: ${{ env.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
-        ENVIRONMENT: dev
       #TODO Save Terraform plan file and metadata
 
   terraform-deploy-on-dev:
     name: Terraform deploy on Development
     runs-on: ubuntu-latest
     needs: [terraform-check-on-dev]
-    environment: Development
+    environment: dev
     permissions:
       id-token: write
       contents: read
@@ -48,14 +46,14 @@ jobs:
     - name: terraform-apply
       uses: ./.github/actions/terraform-apply
       with:
-        # AWS_REGION: us-east-1
+        AWS_REGION: ${{ env.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
-        ENVIRONMENT: dev
 
   helm-check-on-dev:
     name: Helm check on Development
     runs-on: ubuntu-latest
-    environment: Development
+    needs: [terraform-deploy-on-dev]
+    environment: dev
     permissions:
       id-token: write
       contents: read
@@ -66,21 +64,19 @@ jobs:
     - name: validate-helm-charts
       uses: ./.github/actions/validate-helm-charts
       with:
-        # AWS_REGION: us-east-1
+        AWS_REGION: ${{ env.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
-        ENVIRONMENT: dev
     - name: dryrun-k8s-services
       uses: ./.github/actions/dryrun-k8s-services
       with:
-        # AWS_REGION: us-east-1
+        AWS_REGION: ${{ env.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
-        ENVIRONMENT: dev
 
   helm-deploy-on-dev:
     name: Helm deploy on Development
     runs-on: ubuntu-latest
     needs: [helm-check-on-dev]
-    environment: Development
+    environment: dev
     permissions:
       id-token: write
       contents: read
@@ -91,15 +87,14 @@ jobs:
     - name: deploy-k8s-services
       uses: ./.github/actions/deploy-k8s-services
       with:
-        # AWS_REGION: us-east-1
+        AWS_REGION: ${{ env.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
-        ENVIRONMENT: dev
 
   commit-deployment-on-dev:
     name: Commit deployment on Development
     runs-on: ubuntu-latest
     needs: [terraform-deploy-on-dev, helm-deploy-on-dev]
-    environment: Development
+    environment: dev
     permissions:
       id-token: write
       contents: read
@@ -110,14 +105,13 @@ jobs:
     - name: commit-deployment
       uses: ./.github/actions/commit-deployment
       with:
-        # AWS_REGION: us-east-1
+        AWS_REGION: ${{ env.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
-        ENVIRONMENT: dev
 
   check-on-test:
     name: Check on Test
     runs-on: ubuntu-latest
-    environment: Test
+    environment: test
     permissions:
       id-token: write
       contents: read
@@ -128,26 +122,23 @@ jobs:
     - name: terraform-plan
       uses: ./.github/actions/terraform-plan
       with:
-        # AWS_REGION: us-east-1
+        AWS_REGION: ${{ env.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
-        ENVIRONMENT: test
     - name: validate-helm-charts
       uses: ./.github/actions/validate-helm-charts
       with:
-        # AWS_REGION: us-east-1
+        AWS_REGION: ${{ env.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
-        ENVIRONMENT: test
     - name: dryrun-k8s-services
       uses: ./.github/actions/dryrun-k8s-services
       with:
-        # AWS_REGION: us-east-1
+        AWS_REGION: ${{ env.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
-        ENVIRONMENT: test
 
   check-on-prod:
     name: Check on Production
     runs-on: ubuntu-latest
-    environment: Production
+    environment: prod
     permissions:
       id-token: write
       contents: read
@@ -158,19 +149,16 @@ jobs:
     - name: terraform-plan
       uses: ./.github/actions/terraform-plan
       with:
-        # AWS_REGION: us-east-1
+        AWS_REGION: ${{ env.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
-        ENVIRONMENT: prod
     - name: validate-helm-charts
       uses: ./.github/actions/validate-helm-charts
       with:
-        # AWS_REGION: us-east-1
+        AWS_REGION: ${{ env.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
-        ENVIRONMENT: prod
     - name: dryrun-k8s-services
       uses: ./.github/actions/dryrun-k8s-services
       with:
-        # AWS_REGION: us-east-1
+        AWS_REGION: ${{ env.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
-        ENVIRONMENT: prod
 

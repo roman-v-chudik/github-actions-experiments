@@ -1,10 +1,10 @@
 name: terraform-check-fmt-lint
 description: Check out the lastest repo and check Terraform code correctness
 
-inputs:
-  ENVIRONMENT:
-    description: The environment to check against
-    required: true
+# inputs:
+#   ENVIRONMENT:
+#     description: The environment to check against
+#     required: true
   # AWS_REGION:
   #   description: The AWS region where the S3 bucket is located
   #   required: true
@@ -25,5 +25,5 @@ runs:
   #     aws-region: ${{ inputs.AWS_REGION }}
   - name: Do it!
     run: |
-      echo terraform-check-fmt-lint job on ${{ inputs.ENVIRONMENT }} is here!
+      echo terraform-check-fmt-lint job ${{ env.ENVIRONMENT }} is here at ${{ env.AWS_REGION }}!
     shell: bash
