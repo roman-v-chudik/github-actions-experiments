@@ -1,6 +1,13 @@
 name: dryrun-k8s-services
 description: dryrun-k8s-services
 
+inputs:
+  AWS_REGION:
+    description: The AWS region where the S3 bucket is located
+    required: true
+  ENVIRONMENT:
+    description: The Github Environment
+    required: true
 # inputs:
 #   ENVIRONMENT:
 #     description: The environment to check against
@@ -25,5 +32,5 @@ runs:
   #     aws-region: ${{ inputs.AWS_REGION }}
   - name: Do it!
     run: |
-      echo dryrun-k8s-services job ${{ env.ENVIRONMENT }} is here at ${{ env.AWS_REGION }}!
+      echo dryrun-k8s-services job ${{ input.ENVIRONMENT }} is here at ${{ input.AWS_REGION }}!
     shell: bash
