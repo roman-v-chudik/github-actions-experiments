@@ -22,14 +22,14 @@ jobs:
       uses: ./.github/actions/terraform-check-fmt-lint
       with:
         AWS_REGION: ${{ vars.AWS_REGION }}
-        ENVIRONMENT: ${{ vars.ENVIRONMENT }}
+        ENVIRONMENT: ${{ vars.STAGE }}
       #   AWS_REGION: ${{ vars.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
     - name: terraform-plan
       uses: ./.github/actions/terraform-plan
       with:
         AWS_REGION: ${{ vars.AWS_REGION }}
-        ENVIRONMENT: ${{ vars.ENVIRONMENT }}
+        ENVIRONMENT: ${{ vars.STAGE }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
       #TODO Save Terraform plan file and metadata
 
@@ -50,7 +50,7 @@ jobs:
       uses: ./.github/actions/terraform-apply
       with:
         AWS_REGION: ${{ vars.AWS_REGION }}
-        ENVIRONMENT: ${{ vars.ENVIRONMENT }}
+        ENVIRONMENT: ${{ vars.STAGE }}
       # with:
       #   AWS_REGION: ${{ vars.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
@@ -71,7 +71,7 @@ jobs:
       uses: ./.github/actions/validate-helm-charts
       with:
         AWS_REGION: ${{ vars.AWS_REGION }}
-        ENVIRONMENT: ${{ vars.ENVIRONMENT }}
+        ENVIRONMENT: ${{ vars.STAGE }}
       # with:
       #   AWS_REGION: ${{ vars.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
@@ -79,7 +79,7 @@ jobs:
       uses: ./.github/actions/dryrun-k8s-services
       with:
         AWS_REGION: ${{ vars.AWS_REGION }}
-        ENVIRONMENT: ${{ vars.ENVIRONMENT }}
+        ENVIRONMENT: ${{ vars.STAGE }}
       # with:
       #   AWS_REGION: ${{ vars.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
@@ -100,7 +100,7 @@ jobs:
       uses: ./.github/actions/deploy-k8s-services
       with:
         AWS_REGION: ${{ vars.AWS_REGION }}
-        ENVIRONMENT: ${{ vars.ENVIRONMENT }}
+        ENVIRONMENT: ${{ vars.STAGE }}
       # with:
       #   AWS_REGION: ${{ vars.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
@@ -121,7 +121,7 @@ jobs:
       uses: ./.github/actions/commit-deployment
       with:
         AWS_REGION: ${{ vars.AWS_REGION }}
-        ENVIRONMENT: ${{ vars.ENVIRONMENT }}
+        ENVIRONMENT: ${{ vars.STAGE }}
       # with:
       #   AWS_REGION: ${{ vars.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
@@ -141,7 +141,7 @@ jobs:
       uses: ./.github/actions/terraform-plan
       with:
         AWS_REGION: ${{ vars.AWS_REGION }}
-        ENVIRONMENT: ${{ vars.ENVIRONMENT }}
+        ENVIRONMENT: ${{ vars.STAGE }}
       # with:
       #   AWS_REGION: ${{ vars.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
@@ -149,7 +149,7 @@ jobs:
       uses: ./.github/actions/validate-helm-charts
       with:
         AWS_REGION: ${{ vars.AWS_REGION }}
-        ENVIRONMENT: ${{ vars.ENVIRONMENT }}
+        ENVIRONMENT: ${{ vars.STAGE }}
       # with:
       #   AWS_REGION: ${{ vars.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
@@ -157,7 +157,7 @@ jobs:
       uses: ./.github/actions/dryrun-k8s-services
       with:
         AWS_REGION: ${{ vars.AWS_REGION }}
-        ENVIRONMENT: ${{ vars.ENVIRONMENT }}
+        ENVIRONMENT: ${{ vars.STAGE }}
       # with:
       #   AWS_REGION: ${{ vars.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
@@ -177,7 +177,7 @@ jobs:
       uses: ./.github/actions/terraform-plan
       with:
         AWS_REGION: ${{ vars.AWS_REGION }}
-        ENVIRONMENT: ${{ vars.ENVIRONMENT }}
+        ENVIRONMENT: ${{ vars.STAGE }}
       # with:
       #   AWS_REGION: ${{ vars.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
@@ -185,7 +185,7 @@ jobs:
       uses: ./.github/actions/validate-helm-charts
       with:
         AWS_REGION: ${{ vars.AWS_REGION }}
-        ENVIRONMENT: ${{ vars.ENVIRONMENT }}
+        ENVIRONMENT: ${{ vars.STAGE }}
       # with:
       #   AWS_REGION: ${{ vars.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
@@ -193,7 +193,7 @@ jobs:
       uses: ./.github/actions/dryrun-k8s-services
       with:
         AWS_REGION: ${{ vars.AWS_REGION }}
-        ENVIRONMENT: ${{ vars.ENVIRONMENT }}
+        ENVIRONMENT: ${{ vars.STAGE }}
       # with:
       #   AWS_REGION: ${{ vars.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
