@@ -4,12 +4,7 @@ on:
   push:
     branches:
       - 'feature/*'
-  workflow_dispatch:
-
-default_params: &default_params
-        AWS_REGION: ${{ env.AWS_REGION }}
-        ENVIRONMENT: ${{ env.ENVIRONMENT }}
-
+  # workflow_dispatch:
 
 jobs:
   terraform-check-on-dev:
@@ -26,7 +21,8 @@ jobs:
     - name: terraform-lint
       uses: ./.github/actions/terraform-check-fmt-lint
       with:
-        <<: *default_params
+        AWS_REGION: ${{ env.AWS_REGION }}
+        ENVIRONMENT: ${{ env.ENVIRONMENT }}
       #   AWS_REGION: ${{ env.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
     - name: terraform-plan
