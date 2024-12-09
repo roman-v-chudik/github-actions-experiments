@@ -97,10 +97,23 @@ jobs:
       #   AWS_REGION: ${{ vars.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
 
+  helm-approve-on-dev:
+    name: Helm approve on dev
+    runs-on: ubuntu-latest
+    needs: [helm-check-on-dev]
+    environment: manual-approve-dev
+    permissions:
+      id-token: write
+      contents: read
+    timeout-minutes: 45
+    steps:
+    - name: Approved
+      run: echo "Approved"
+
   helm-deploy-on-dev:
     name: Helm deploy on dev
     runs-on: ubuntu-latest
-    needs: [helm-check-on-dev]
+    needs: [helm-approve-on-dev]
     environment: dev
     permissions:
       id-token: write
