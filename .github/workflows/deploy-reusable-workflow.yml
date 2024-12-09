@@ -3,13 +3,7 @@ name: Deploy
 on:
   workflow_call:
     inputs:
-      aws-region:
-        required: true
-        type: string
       environment:
-        required: true
-        type: string
-      aws-aim-role-arn:
         required: true
         type: string
 
@@ -28,15 +22,15 @@ jobs:
     - name: terraform-lint
       uses: ./.github/actions/terraform-check-fmt-lint
       with:
-        AWS_REGION: ${{ inputs.aws-region }}
-        ENVIRONMENT: ${{ inputs.environment }}
-        AWS_IAM_ROLE_ARN: ${{ inputs.aws-aim-role-arn }}
+        AWS_REGION: ${{ vars.AWS_REGION }}
+        ENVIRONMENT: ${{ vars.STAGE }}
+        AWS_IAM_ROLE_ARN: ${{ vars.AWS_IAM_ROLE_ARN }}
     - name: terraform-plan
       uses: ./.github/actions/terraform-plan
       with:
         AWS_REGION: ${{ vars.AWS_REGION }}
         ENVIRONMENT: ${{ vars.STAGE }}
-        AWS_IAM_ROLE_ARN: ${{ inputs.aws-aim-role-arn }}
+        AWS_IAM_ROLE_ARN: ${{ vars.AWS_IAM_ROLE_ARN }}
       #TODO Save Terraform plan file and metadata
 
   terraform-approve:
@@ -70,7 +64,7 @@ jobs:
       with:
         AWS_REGION: ${{ vars.AWS_REGION }}
         ENVIRONMENT: ${{ vars.STAGE }}
-        AWS_IAM_ROLE_ARN: ${{ inputs.aws-aim-role-arn }}
+        AWS_IAM_ROLE_ARN: ${{ vars.AWS_IAM_ROLE_ARN }}
 
   helm-check:
     name: Helm check on ${{ inputs.environment }}
@@ -89,13 +83,13 @@ jobs:
       with:
         AWS_REGION: ${{ vars.AWS_REGION }}
         ENVIRONMENT: ${{ vars.STAGE }}
-        AWS_IAM_ROLE_ARN: ${{ inputs.aws-aim-role-arn }}
+        AWS_IAM_ROLE_ARN: ${{ vars.AWS_IAM_ROLE_ARN }}
     - name: dryrun-k8s-services
       uses: ./.github/actions/dryrun-k8s-services
       with:
         AWS_REGION: ${{ vars.AWS_REGION }}
         ENVIRONMENT: ${{ vars.STAGE }}
-        AWS_IAM_ROLE_ARN: ${{ inputs.aws-aim-role-arn }}
+        AWS_IAM_ROLE_ARN: ${{ vars.AWS_IAM_ROLE_ARN }}
 
   helm-approve:
     name: Helm approve on ${{ inputs.environment }}
@@ -127,7 +121,7 @@ jobs:
       with:
         AWS_REGION: ${{ vars.AWS_REGION }}
         ENVIRONMENT: ${{ vars.STAGE }}
-        AWS_IAM_ROLE_ARN: ${{ inputs.aws-aim-role-arn }}
+        AWS_IAM_ROLE_ARN: ${{ vars.AWS_IAM_ROLE_ARN }}
 
   commit-deployment:
     name: Commit deployment on ${{ inputs.environment }}
@@ -146,5 +140,5 @@ jobs:
       with:
         AWS_REGION: ${{ vars.AWS_REGION }}
         ENVIRONMENT: ${{ vars.STAGE }}
-        AWS_IAM_ROLE_ARN: ${{ inputs.aws-aim-role-arn }}
+        AWS_IAM_ROLE_ARN: ${{ vars.AWS_IAM_ROLE_ARN }}
 

@@ -9,11 +9,8 @@ jobs:
   deploy-on-dev:
     name: Deploy on dev
     uses: ./.github/workflows/deploy-reusable-workflow.yml
-    environment: dev
     with:
-      aws-region: ${{ vars.AWS_REGION }}
-      environment: ${{ vars.STAGE }}
-      aws-aim-role-arn: ${{ vars.AWS_IAM_ROLE_ARN }}
+      environment: dev
 
   check-on-test:
     name: Check on test
