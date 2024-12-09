@@ -1,4 +1,4 @@
-name: Deploy from feature branch
+name: Deploy from main branch
 
 on:
   push:
