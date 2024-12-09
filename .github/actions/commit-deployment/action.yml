@@ -25,5 +25,5 @@ runs:
   #     aws-region: ${{ inputs.AWS_REGION }}
   - name: Do it!
     run: |
-      echo commit-deployment job on ${{ input.ENVIRONMENT }} is here at ${{ input.AWS_REGION }}!
+      echo commit-deployment job on ${{ inputs.ENVIRONMENT }} is here at ${{ inputs.AWS_REGION }}!
     shell: bash

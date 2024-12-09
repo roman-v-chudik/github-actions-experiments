@@ -32,5 +32,5 @@ runs:
   #     aws-region: ${{ inputs.AWS_REGION }}
   - name: Do it!
     run: |
-      echo dryrun-k8s-services job ${{ input.ENVIRONMENT }} is here at ${{ input.AWS_REGION }}!
+      echo dryrun-k8s-services job ${{ inputs.ENVIRONMENT }} is here at ${{ inputs.AWS_REGION }}!
     shell: bash

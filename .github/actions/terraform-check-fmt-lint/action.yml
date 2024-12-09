@@ -32,5 +32,5 @@ runs:
   #     aws-region: ${{ inputs.AWS_REGION }}
   - name: Do it!
     run: |
-      echo terraform-check-fmt-lint job ${{ input.ENVIRONMENT }} is here at ${{ input.AWS_REGION }}!
+      echo terraform-check-fmt-lint job ${{ inputs.ENVIRONMENT }} is here at ${{ inputs.AWS_REGION }}!
     shell: bash
