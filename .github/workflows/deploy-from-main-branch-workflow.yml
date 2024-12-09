@@ -1,0 +1,35 @@
+name: Deploy from feature branch
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  deploy-on-dev:
+    name: Deploy on dev
+    uses: ./.github/workflows/deploy-reusable-workflow.yml
+    permissions:
+      id-token: write
+      contents: read
+    with:
+      environment: dev
+
+  deploy-on-test:
+    name: Deploy on test
+    uses: ./.github/workflows/deploy-reusable-workflow.yml
+    permissions:
+      id-token: write
+      contents: read
+    with:
+      environment: test
+
+  deploy-on-prod:
+    name: Deploy on prod
+    uses: ./.github/workflows/deploy-reusable-workflow.yml
+    permissions:
+      id-token: write
+      contents: read
+    with:
+      environment: prod
+

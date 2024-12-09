@@ -8,16 +8,9 @@ inputs:
   ENVIRONMENT:
     description: The Github Environment
     required: true
-# inputs:
-#   ENVIRONMENT:
-#     description: The environment to check against
-#     required: true
-  # AWS_REGION:
-  #   description: The AWS region where the S3 bucket is located
-  #   required: true
-  # AWS_IAM_ROLE_ARN:
-  #   description: The ARN of the IAM Role with the proper permissions to assume
-  #   required: true
+  AWS_IAM_ROLE_ARN:
+    description: The ARN of the IAM Role with the proper permissions to assume
+    required: true
 
 runs:
   using: "composite"
@@ -32,5 +25,5 @@ runs:
   #     aws-region: ${{ inputs.AWS_REGION }}
   - name: Do it!
     run: |
-      echo terraform-check-fmt-lint job ${{ inputs.ENVIRONMENT }} is here at ${{ inputs.AWS_REGION }}!
+      echo terraform-check-fmt-lint job on ${{ inputs.ENVIRONMENT }} is here at ${{ inputs.AWS_REGION }}!
     shell: bash

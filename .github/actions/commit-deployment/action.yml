@@ -1,16 +1,10 @@
 name: commit-deployment
-description: Check out the lastest repo and check Terraform code correctness
+description: Commit a git tag for the deployment
 
 inputs:
-  AWS_REGION:
-    description: The AWS region where the S3 bucket is located
-    required: true
   ENVIRONMENT:
     description: The Github Environment
     required: true
-  # AWS_IAM_ROLE_ARN:
-  #   description: The ARN of the IAM Role with the proper permissions to assume
-  #   required: true
 
 runs:
   using: "composite"
@@ -18,12 +12,7 @@ runs:
   steps:
   - name: Checkout
     uses: actions/checkout@v4
-  # - name: Configure AWS credentials
-  #   uses: aws-actions/configure-aws-credentials@v4
-  #   with:
-  #     role-to-assume: ${{ inputs.AWS_IAM_ROLE_ARN }}
-  #     aws-region: ${{ inputs.AWS_REGION }}
   - name: Do it!
     run: |
-      echo commit-deployment job on ${{ inputs.ENVIRONMENT }} is here at ${{ inputs.AWS_REGION }}!
+      echo commit-deployment job on ${{ inputs.ENVIRONMENT }} is here!
     shell: bash
