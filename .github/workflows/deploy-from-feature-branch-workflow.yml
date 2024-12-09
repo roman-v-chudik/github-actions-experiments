@@ -21,15 +21,15 @@ jobs:
     - name: terraform-lint
       uses: ./.github/actions/terraform-check-fmt-lint
       with:
-        AWS_REGION: ${{ env.AWS_REGION }}
-        ENVIRONMENT: ${{ env.ENVIRONMENT }}
-      #   AWS_REGION: ${{ env.AWS_REGION }}
+        AWS_REGION: ${{ vars.AWS_REGION }}
+        ENVIRONMENT: ${{ vars.ENVIRONMENT }}
+      #   AWS_REGION: ${{ vars.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
     - name: terraform-plan
       uses: ./.github/actions/terraform-plan
       with:
-        AWS_REGION: ${{ env.AWS_REGION }}
-        ENVIRONMENT: ${{ env.ENVIRONMENT }}
+        AWS_REGION: ${{ vars.AWS_REGION }}
+        ENVIRONMENT: ${{ vars.ENVIRONMENT }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
       #TODO Save Terraform plan file and metadata
 
@@ -49,10 +49,10 @@ jobs:
     - name: terraform-apply
       uses: ./.github/actions/terraform-apply
       with:
-        AWS_REGION: ${{ env.AWS_REGION }}
-        ENVIRONMENT: ${{ env.ENVIRONMENT }}
+        AWS_REGION: ${{ vars.AWS_REGION }}
+        ENVIRONMENT: ${{ vars.ENVIRONMENT }}
       # with:
-      #   AWS_REGION: ${{ env.AWS_REGION }}
+      #   AWS_REGION: ${{ vars.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
 
   helm-check-on-dev:
@@ -70,18 +70,18 @@ jobs:
     - name: validate-helm-charts
       uses: ./.github/actions/validate-helm-charts
       with:
-        AWS_REGION: ${{ env.AWS_REGION }}
-        ENVIRONMENT: ${{ env.ENVIRONMENT }}
+        AWS_REGION: ${{ vars.AWS_REGION }}
+        ENVIRONMENT: ${{ vars.ENVIRONMENT }}
       # with:
-      #   AWS_REGION: ${{ env.AWS_REGION }}
+      #   AWS_REGION: ${{ vars.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
     - name: dryrun-k8s-services
       uses: ./.github/actions/dryrun-k8s-services
       with:
-        AWS_REGION: ${{ env.AWS_REGION }}
-        ENVIRONMENT: ${{ env.ENVIRONMENT }}
+        AWS_REGION: ${{ vars.AWS_REGION }}
+        ENVIRONMENT: ${{ vars.ENVIRONMENT }}
       # with:
-      #   AWS_REGION: ${{ env.AWS_REGION }}
+      #   AWS_REGION: ${{ vars.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
 
   helm-deploy-on-dev:
@@ -99,10 +99,10 @@ jobs:
     - name: deploy-k8s-services
       uses: ./.github/actions/deploy-k8s-services
       with:
-        AWS_REGION: ${{ env.AWS_REGION }}
-        ENVIRONMENT: ${{ env.ENVIRONMENT }}
+        AWS_REGION: ${{ vars.AWS_REGION }}
+        ENVIRONMENT: ${{ vars.ENVIRONMENT }}
       # with:
-      #   AWS_REGION: ${{ env.AWS_REGION }}
+      #   AWS_REGION: ${{ vars.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
 
   commit-deployment-on-dev:
@@ -120,10 +120,10 @@ jobs:
     - name: commit-deployment
       uses: ./.github/actions/commit-deployment
       with:
-        AWS_REGION: ${{ env.AWS_REGION }}
-        ENVIRONMENT: ${{ env.ENVIRONMENT }}
+        AWS_REGION: ${{ vars.AWS_REGION }}
+        ENVIRONMENT: ${{ vars.ENVIRONMENT }}
       # with:
-      #   AWS_REGION: ${{ env.AWS_REGION }}
+      #   AWS_REGION: ${{ vars.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
 
   check-on-test:
@@ -140,26 +140,26 @@ jobs:
     - name: terraform-plan
       uses: ./.github/actions/terraform-plan
       with:
-        AWS_REGION: ${{ env.AWS_REGION }}
-        ENVIRONMENT: ${{ env.ENVIRONMENT }}
+        AWS_REGION: ${{ vars.AWS_REGION }}
+        ENVIRONMENT: ${{ vars.ENVIRONMENT }}
       # with:
-      #   AWS_REGION: ${{ env.AWS_REGION }}
+      #   AWS_REGION: ${{ vars.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
     - name: validate-helm-charts
       uses: ./.github/actions/validate-helm-charts
       with:
-        AWS_REGION: ${{ env.AWS_REGION }}
-        ENVIRONMENT: ${{ env.ENVIRONMENT }}
+        AWS_REGION: ${{ vars.AWS_REGION }}
+        ENVIRONMENT: ${{ vars.ENVIRONMENT }}
       # with:
-      #   AWS_REGION: ${{ env.AWS_REGION }}
+      #   AWS_REGION: ${{ vars.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
     - name: dryrun-k8s-services
       uses: ./.github/actions/dryrun-k8s-services
       with:
-        AWS_REGION: ${{ env.AWS_REGION }}
-        ENVIRONMENT: ${{ env.ENVIRONMENT }}
+        AWS_REGION: ${{ vars.AWS_REGION }}
+        ENVIRONMENT: ${{ vars.ENVIRONMENT }}
       # with:
-      #   AWS_REGION: ${{ env.AWS_REGION }}
+      #   AWS_REGION: ${{ vars.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
 
   check-on-prod:
@@ -176,25 +176,25 @@ jobs:
     - name: terraform-plan
       uses: ./.github/actions/terraform-plan
       with:
-        AWS_REGION: ${{ env.AWS_REGION }}
-        ENVIRONMENT: ${{ env.ENVIRONMENT }}
+        AWS_REGION: ${{ vars.AWS_REGION }}
+        ENVIRONMENT: ${{ vars.ENVIRONMENT }}
       # with:
-      #   AWS_REGION: ${{ env.AWS_REGION }}
+      #   AWS_REGION: ${{ vars.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
     - name: validate-helm-charts
       uses: ./.github/actions/validate-helm-charts
       with:
-        AWS_REGION: ${{ env.AWS_REGION }}
-        ENVIRONMENT: ${{ env.ENVIRONMENT }}
+        AWS_REGION: ${{ vars.AWS_REGION }}
+        ENVIRONMENT: ${{ vars.ENVIRONMENT }}
       # with:
-      #   AWS_REGION: ${{ env.AWS_REGION }}
+      #   AWS_REGION: ${{ vars.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
     - name: dryrun-k8s-services
       uses: ./.github/actions/dryrun-k8s-services
       with:
-        AWS_REGION: ${{ env.AWS_REGION }}
-        ENVIRONMENT: ${{ env.ENVIRONMENT }}
+        AWS_REGION: ${{ vars.AWS_REGION }}
+        ENVIRONMENT: ${{ vars.ENVIRONMENT }}
       # with:
-      #   AWS_REGION: ${{ env.AWS_REGION }}
+      #   AWS_REGION: ${{ vars.AWS_REGION }}
         # AWS_IAM_ROLE_ARN: arn:aws:iam::973669856136:role/ace-marketing-dev-github-actions-oidc-role
 
